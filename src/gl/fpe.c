@@ -1114,6 +1114,9 @@ void realize_glenv(int ispoint, int first, int count, GLenum type, const void* i
             if (gl4es_glIsProgram(glstate->gleshard->program)) {
               gles_glUseProgram(glstate->gleshard->program);
               DBG(printf("Use GLSL program %d\n", glstate->gleshard->program);)
+            } else {
+              DBG(printf("GLSL program is not valid!\n");)
+              glstate->gleshard->glprogram = NULL;
             }
         }
         // synchronize uniforms with parent!
@@ -1128,6 +1131,9 @@ void realize_glenv(int ispoint, int first, int count, GLenum type, const void* i
             if (gl4es_glIsProgram(glstate->gleshard->program)) {
               gles_glUseProgram(glstate->gleshard->program);
               DBG(printf("Use FPE program %d\n", glstate->gleshard->program);)
+            } else {
+              DBG(printf("FPE program is not valid!\n");)
+              glstate->gleshard->glprogram = NULL;
             }
         }
     }

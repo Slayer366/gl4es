@@ -5,10 +5,9 @@
  */
 #ifndef NOX11
 
-void
-fill_bitmap(Display * dpy, Window win, GC gc,
+void fill_bitmap(Display *dpy, Window win, GC gc,
             unsigned int width, unsigned int height,
-            int x0, int y0, unsigned int c, GLubyte * bitmap)
+            int x0, int y0, unsigned int c, GLubyte *bitmap)
 {
    XImage *image;
    unsigned int x, y;
@@ -43,9 +42,7 @@ fill_bitmap(Display * dpy, Window win, GC gc,
  * corresponding XCharStruct.
  * From MesaGL-9.0.1
  */
-XCharStruct *
-isvalid(XFontStruct * fs, int which)
-{
+XCharStruct *isvalid(XFontStruct *fs, int which) {
    unsigned int rows, pages;
    int byte1 = 0, byte2 = 0;
    int i, valid = 1;
@@ -57,8 +54,7 @@ isvalid(XFontStruct * fs, int which)
       /* "linear" fonts */
       if ((fs->min_char_or_byte2 > which) || (fs->max_char_or_byte2 < which))
          valid = 0;
-   }
-   else {
+   } else {
       /* "matrix" fonts */
       byte2 = which & 0xff;
       byte1 = which >> 8;
@@ -73,15 +69,13 @@ isvalid(XFontStruct * fs, int which)
          if (rows == 1) {
             /* "linear" fonts */
             return (fs->per_char + (which - fs->min_char_or_byte2));
-         }
-         else {
+         } else {
             /* "matrix" fonts */
             i = ((byte1 - fs->min_byte1) * pages) +
                (byte2 - fs->min_char_or_byte2);
             return (fs->per_char + i);
          }
-      }
-      else {
+      } else {
          return (&fs->min_bounds);
       }
    }

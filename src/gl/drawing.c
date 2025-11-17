@@ -886,10 +886,15 @@ void APIENTRY_GL4ES gl4es_glMultiDrawArrays(GLenum mode, const GLint *firsts, co
     else
         errorGL();
 }
-AliasExport(void,glMultiDrawArrays,,(GLenum mode, const GLint *first, const GLsizei *count, GLsizei primcount));
+AliasExport(void, glMultiDrawArrays, ,
+            (GLenum mode, const GLint *first, const GLsizei *count,
+             GLsizei primcount));
 
-void APIENTRY_GL4ES gl4es_glMultiDrawElements( GLenum mode, GLsizei *counts, GLenum type, const void * const *indices, GLsizei primcount)
-{
+void APIENTRY_GL4ES gl4es_glMultiDrawElements(GLenum mode,
+                                              const GLsizei *counts,
+                                              GLenum type,
+                                              const GLvoid **indices,
+                                              GLsizei primcount) {
     DBG(printf("glMultiDrawElements(%s, %p, %s, %p, %d), list=%p pending=%d\n", PrintEnum(mode), counts, PrintEnum(type), indices, primcount, glstate->list.active, glstate->list.pending);)
     if(!primcount) {
         noerrorShim();

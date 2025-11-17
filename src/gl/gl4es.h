@@ -73,7 +73,10 @@ void APIENTRY_GL4ES gl4es_glFogfv(GLenum pname, const GLfloat* params);
 void APIENTRY_GL4ES gl4es_glStencilMaskSeparate(GLenum face, GLuint mask);
 
 void APIENTRY_GL4ES gl4es_glMultiDrawArrays(GLenum mode, const GLint *first, const GLsizei *count, GLsizei primcount);
-void APIENTRY_GL4ES gl4es_glMultiDrawElements( GLenum mode, GLsizei *count, GLenum type, const void * const *indices, GLsizei primcount);
+void APIENTRY_GL4ES gl4es_glMultiDrawElements(GLenum mode, const GLsizei *count,
+                                              GLenum type,
+                                              const GLvoid ** indices,
+                                              GLsizei primcount);
 void APIENTRY_GL4ES gl4es_glMultiDrawElementsBaseVertex( GLenum mode, GLsizei *count, GLenum type, const void * const *indices, GLsizei primcount, const GLint * basevertex);
 
 void APIENTRY_GL4ES gl4es_glDrawElementsBaseVertex(GLenum mode, GLsizei count, GLenum type, const void *indices, GLint basevertex);
@@ -99,7 +102,7 @@ void fpe_Dispose(glstate_t *glstate);    // defined in fpe.c
 // glGetError() return last error, but that error is not reset until read
 // So if 2 operations generate an error, 
 //  the 2nd error is lost if glGetError has not been called after 1st op
-static inline void errorGL() {	// next glGetError will be from GL 
+static inline void errorGL() { // next glGetError will be from GL
     if(glstate->type_error && glstate->shim_error==GL_NO_ERROR)
 	    glstate->type_error = 0;
     else if(glstate->type_error==2)

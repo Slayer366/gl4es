@@ -3026,7 +3026,7 @@ packed_call_t* APIENTRY_GL4ES glCopyPackedCall(const packed_call_t *packed);
 #define glMultiDrawElements_INDEX 151
 #define glMultiDrawElements_RETURN void
 #define glMultiDrawElements_ARG_NAMES mode, count, type, indices, primcount
-#define glMultiDrawElements_ARG_EXPAND GLenum mode, GLsizei * count, GLenum type, const void * const * indices, GLsizei primcount
+#define glMultiDrawElements_ARG_EXPAND GLenum mode, const GLsizei *count, GLenum type, const GLvoid **indices, GLsizei primcount
 #define glMultiDrawElements_PACKED PACKED_void_GLenum_GLsizei___GENPT___GLenum_const_void___GENPT___const___GENPT___GLsizei
 #define glMultiDrawElements_INDEXED INDEXED_void_GLenum_GLsizei___GENPT___GLenum_const_void___GENPT___const___GENPT___GLsizei
 #define glMultiDrawElements_FORMAT FORMAT_void_GLenum_GLsizei___GENPT___GLenum_const_void___GENPT___const___GENPT___GLsizei

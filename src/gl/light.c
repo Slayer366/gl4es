@@ -77,6 +77,10 @@ void APIENTRY_GL4ES gl4es_glLightModelfv(GLenum pname, const GLfloat* params) {
             return;
         } else gl4es_flush();
     switch (pname) {
+			case 0x4242:
+            if (glstate->fpe_state)
+                glstate->fpe_state->gamma = params[0] * 100;
+            return;	
         case GL_LIGHT_MODEL_AMBIENT:
             if(memcmp(glstate->light.ambient, params, 4*sizeof(GLfloat))==0) {
                 noerrorShim();
@@ -255,7 +259,7 @@ void APIENTRY_GL4ES gl4es_glMaterialfv(GLenum face, GLenum pname, const GLfloat 
             // if a glMaterialfv is called inside a glBegin/glEnd block
             // then use rlMaterial to store in current list the material wanted
             // as if the material was asked before the glBegin()
-            // It's not real behaviour, but it's better then nothing
+            // It's not real behaviour, but it's better than nothing
                 rlMaterialfv(glstate->list.active, face, pname, params);
                 noerrorShim();
                 return;

@@ -29,7 +29,7 @@ extern int gl_stream;		//0 if no streaming not 0 if streaming available
 // Function to start the Streaming texture Cache. Return 0 if failed, non-0 if OK.
 int InitStreamingCache();
 // Function to get a Streaming buffer address
-void* GetStreamingBuffer(int buff);
+void *GetStreamingBuffer(int buff);
 // Function to add a new texture of size Width*Height, with fake Texture ID "ID". Return the StreamingID or -1 if failed.
 int AddStreamed(int width, int height, unsigned int ID);
 // Function to free a streamed texture ID

@@ -883,10 +883,16 @@ GLXContext gl4es_glXCreateContextAttribsARB(Display *display, GLXFBConfig config
                                       const int *attrib_list) {
     DBG(printf("glXCreateContextAttribsARB(%p, %p, %p, %d, %p) ", display, config, share_context, direct, attrib_list);
         if(config)
-            printf("config is RGBA:%d%d%d%d, depth=%d, stencil=%d, multisample=%d/%d doublebuff=%d, drawable=%d\n", config->redBits, config->greenBits, config->blueBits, config->alphaBits, config->depthBits, config->stencilBits, config->multiSampleSize, config->nMultiSampleBuffers, config->doubleBufferMode, config->drawableType); 
-        else printf("\n");
-    )
-    if(config && config->drawableType==GLX_PBUFFER_BIT) {
+            printf("config is RGBA:%d%d%d%d, depth=%d, stencil=%d, multisample=%d/%d doublebuff=%d, drawable=%d\n", config->redBits, config->greenBits, config->blueBits, config->alphaBits, config->depthBits, config->stencilBits, config->multiSampleSize, config->nMultiSampleBuffers, config->doubleBufferMode, config->drawableType);
+        else printf("\n");)
+//    if(config && config->drawableType==GLX_PBUFFER_BIT) {
+    if (config == NULL) {
+      CheckEGLErrors();
+      LOGE("Bad GLXFBConfig");
+      return NULL;
+    }
+
+    if (config->drawableType == GLX_PBUFFER_BIT) {
         return createPBufferContext(display, share_context, config);
     } else {
         EGLint type = 0;
@@ -993,7 +999,7 @@ void gl4es_glXDestroyContext(Display *display, GLXContext ctx) {
     DBG(printf("glXDestroyContext(%p, %p), fbcontext_count=%d, ctx_type=%d\n", display, ctx, fbcontext_count, (ctx)?ctx->contextType:0);)
     if(globals4es.usefb)
         --fbcontext_count;
-    if (ctx->eglContext) {
+    if (ctx != NULL && ctx->eglContext) {
         // need to bind back the context to delete stuff?
         LOAD_EGL(eglMakeCurrent);
         if(eglSurface!=ctx->eglSurface || eglContext!=ctx->eglContext) {
@@ -1056,10 +1062,13 @@ void gl4es_glXDestroyContext(Display *display, GLXContext ctx) {
             fbdev = -1;
         }*/
     }
-    if(glxContext==ctx)
+    if (glxContext == ctx) {
         glxContext = NULL;
-        
+        ctx = NULL;
+    }
+
     free(ctx);
+    ctx = NULL;
     return;
 }
 
@@ -1347,7 +1356,7 @@ Bool gl4es_glXMakeCurrent(Display *display,
                             }
                             if(eglSurf == EGL_NO_SURFACE) {
                                 context->nativewin = create_native_window(width,height);
-#if 0//ndef NO_GBM
+#if 0 // ndef NO_GBM
                                 if(globals4es.usegbm) {
                                     LOAD_EGL_EXT(eglCreatePlatformWindowSurface);
                                     eglSurf = egl_eglCreatePlatformWindowSurface(eglDisplay, context->eglConfigs[context->eglconfigIdx], context->nativewin, attrib_list);
@@ -2076,6 +2085,12 @@ XVisualInfo *gl4es_glXGetVisualFromFBConfig(Display *display, GLXFBConfig config
 GLXContext gl4es_glXCreateNewContext(Display *display, GLXFBConfig config,
                                int render_type, GLXContext share_list,
                                Bool is_direct) {
+  if (config == NULL) {
+    CheckEGLErrors();
+    LOGE("Bad GLXFBConfig");
+    return NULL;
+  }
+
     DBG(printf("glXCreateNewContext(%p, %p, %d, %p, %i), drawableType=0x%02X\n", display, config, render_type, share_list, is_direct, (config)?config->drawableType:0);)
     if(render_type!=GLX_RGBA_TYPE)
         return 0;
